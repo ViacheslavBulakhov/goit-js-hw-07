@@ -20,37 +20,40 @@ const itemList =  params.map((item) => {
 
 boxRef.insertAdjacentHTML('afterbegin',createElementList(galleryItems)) ;
 
-boxRef.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (event.target.tagName !== 'IMG') {
-        return;
-    }
-    const imgRef = event.target.dataset.source;
-    modalOpen(imgRef);
+boxRef.addEventListener('click', openModal)
+
+const htmlModal = `<div class="modal">  <img width="1110" height="700" src=""> </div>`;
+const modal = basicLightbox.create(htmlModal,
+{
+    onShow: (instance) => {
+        window.addEventListener("keydown", closeModal);
+    },
+    onClose: (instance) => {
+        window.removeEventListener('keydown', closeModal);
+    },
 })
 
-
-function modalOpen(ref) {
-    const instance = basicLightbox.create(
-        `<div class="modal">
-    <img width="1110" height="700" src="${ref}">
-    </div>` );
-    instance.show();
-    
-    if (basicLightbox.visible()) {
-        keyModalClose(instance)
-    }
-}
-function keyModalClose(instance) {
-    document.addEventListener("keydown", closeModal)
-
-    function closeModal(event) {
+function closeModal(event) {
     event.preventDefault();
         if (event.code === "Escape") {
-            instance.close();
-            document.removeEventListener('keydown', closeModal);
-        }
+        modal.close();
     }
 }
+    
+function openModal(event) {
 
+    event.preventDefault();
+        if (event.target.tagName !== 'IMG') {
+            return;
+        }
+
+        const modalImageEl = modal.element().querySelector('.modal img')
+        const originImageRef = event.target.dataset.source;
+
+        modalImageEl.src = originImageRef;
+    
+        modal.show();
+}
+
+    
 
