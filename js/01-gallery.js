@@ -31,31 +31,26 @@ boxRef.addEventListener('click', (event) => {
 
 
 function modalOpen(ref) {
-        const instance = basicLightbox.create(`
-    <div class="modal">
+    const instance = basicLightbox.create(
+        `<div class="modal">
     <img width="1110" height="700" src="${ref}">
-    </div>
-    `);
+    </div>` );
     instance.show();
+    
     if (basicLightbox.visible()) {
         keyModalClose(instance)
     }
 }
 function keyModalClose(instance) {
     document.addEventListener("keydown", closeModal)
-    
+
     function closeModal(event) {
     event.preventDefault();
         if (event.code === "Escape") {
-            instance.close()
-            document.removeEventListener('keydown', closeModal)
+            instance.close();
+            document.removeEventListener('keydown', closeModal);
         }
     }
 }
-
-
-
-
-
 
 
